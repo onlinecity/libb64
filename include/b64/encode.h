@@ -20,11 +20,7 @@ namespace base64
     struct encoder
     {
         base64_encodestate _state;
-        int _buffersize;
-
-        encoder(int buffersize_in = BUFFERSIZE)
-        : _buffersize(buffersize_in)
-        {}
+        static constexpr int _buffersize = BUFFERSIZE;
 
         int encode(char value_in)
         {
@@ -44,22 +40,22 @@ namespace base64
         void encode(std::istream& istream_in, std::ostream& ostream_in)
         {
             base64_init_encodestate(&_state);
-            //
-            const int N = _buffersize;
-            char* plaintext = new char[N];
-            char* code = new char[2*N];
-            int plainlength;
-            int codelength;
+
+            const auto N = _buffersize;
+            auto plaintext = new char[N];
+            auto code = new char[2*N];
+            auto plainlength = 0;
+            auto codelength = 0;
 
             do
             {
                 istream_in.read(plaintext, N);
                 plainlength = istream_in.gcount();
-                //
+
                 codelength = encode(plaintext, plainlength, code);
                 ostream_in.write(code, codelength);
             }
-            while (istream_in.good() && plainlength > 0);
+            while (istream_in.good() and plainlength > 0);
 
             codelength = encode_end(code);
             ostream_in.write(code, codelength);
