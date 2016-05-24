@@ -44,11 +44,11 @@ namespace base64
 
             do
             {
-                istream_in.read((char*)code, N);
+                istream_in.read(code, N);
                 codelength = istream_in.gcount();
 
                 plainlength = decode(code, codelength, plaintext);
-                ostream_in.write((const char*)plaintext, plainlength);
+                ostream_in.write(static_cast<const char*>(plaintext), plainlength);
             }
             while (istream_in.good() and codelength > 0);
 
