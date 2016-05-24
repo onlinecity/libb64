@@ -19,8 +19,8 @@ namespace base64
 
     struct decoder
     {
-        base64_decodestate _state;
-        static constexpr int _buffersize = BUFFERSIZE;
+        base64_decodestate m_state;
+        static constexpr int m_buffersize = BUFFERSIZE;
 
         int decode(char value_in)
         {
@@ -29,14 +29,14 @@ namespace base64
 
         int decode(const char* code_in, const int length_in, char* plaintext_out)
         {
-            return base64_decode_block(code_in, length_in, plaintext_out, &_state);
+            return base64_decode_block(code_in, length_in, plaintext_out, &m_state);
         }
 
         void decode(std::istream& istream_in, std::ostream& ostream_in)
         {
-            base64_init_decodestate(&_state);
+            base64_init_decodestate(&m_state);
 
-            const auto N = _buffersize;
+            const auto N = m_buffersize;
             auto code = new char[N];
             auto plaintext = new char[N];
             auto codelength = 0;
@@ -52,7 +52,7 @@ namespace base64
             }
             while (istream_in.good() and codelength > 0);
 
-            base64_init_decodestate(&_state);
+            base64_init_decodestate(&m_state);
 
             delete [] code;
             delete [] plaintext;
